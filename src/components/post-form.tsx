@@ -237,7 +237,7 @@ const PostForm = forwardRef<PostFormRef, {
               <select
                 value={link.type}
                 onChange={(e) => updateLink(i, "type", e.target.value)}
-                className="rounded-md border border-gray-300 px-2 py-1.5 text-sm bg-white focus:border-linkedin focus:ring-1 focus:ring-linkedin outline-none shrink-0 w-28"
+                className="rounded-md border border-gray-300 dark:border-gray-600 px-2 py-1.5 text-sm bg-white dark:bg-neutral-800 dark:text-gray-100 focus:border-linkedin focus:ring-1 focus:ring-linkedin outline-none shrink-0 w-28"
               >
                 {LINK_TYPES.map(([val, text]) => (
                   <option key={val} value={val}>{text}</option>
@@ -318,7 +318,7 @@ function Select({ label, value, onChange, options }: { label: string; value: str
     <div>
       <label className="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">{label}</label>
       <select value={value} onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm bg-white focus:border-linkedin focus:ring-1 focus:ring-linkedin outline-none">
+        className="w-full rounded-md border border-gray-300 dark:border-gray-600 px-2 py-1.5 text-sm bg-white dark:bg-neutral-800 dark:text-gray-100 focus:border-linkedin focus:ring-1 focus:ring-linkedin outline-none">
         {options.map(([val, text]) => (<option key={val} value={val}>{text}</option>))}
       </select>
     </div>
@@ -328,9 +328,9 @@ function Select({ label, value, onChange, options }: { label: string; value: str
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <label className="flex items-center justify-between cursor-pointer">
-      <span className="text-xs font-medium text-gray-600">{label}</span>
+      <span className="text-xs font-medium text-gray-600 dark:text-gray-300">{label}</span>
       <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors ${checked ? "bg-linkedin" : "bg-gray-300"}`}>
+        className={`relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors ${checked ? "bg-linkedin" : "bg-gray-300 dark:bg-gray-600"}`}>
         <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform mt-0.5 ${checked ? "translate-x-4.5 ml-0" : "translate-x-0.5"}`} />
       </button>
     </label>
