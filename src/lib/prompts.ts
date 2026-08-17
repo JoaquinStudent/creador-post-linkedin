@@ -58,20 +58,22 @@ ${filters.hashtags ? "- Incluye 3-5 hashtags relevantes al final del post, separ
 ${filters.emojis ? "- Usa emojis estratégicamente para dar ritmo visual (máximo 4-6 en todo el post, no al inicio de cada línea)" : "- NO uses emojis en absoluto"}
 ${filters.cta ? "- Cierra con un call-to-action natural: una pregunta genuina al lector, invitación a compartir su experiencia, o reflexión que invite a comentar" : "- Cierra con una reflexión personal, sin pedir interacción"}
 
-REGLAS DE FORMATO:
+REGLAS DE FORMATO (MUY IMPORTANTE — LinkedIn no es Markdown):
 - Devuelve SOLO el texto del post, nada más
 - No escribas "Post:", comillas, ni encabezados
-- Usa saltos de línea entre párrafos para legibilidad (LinkedIn muestra saltos de línea)
+- NUNCA uses markdown: nada de **bold**, *italic*, ni ningún formato markdown. LinkedIn muestra esos asteriscos como texto plano
+- Usa DOBLE salto de línea (línea vacía) entre cada párrafo. LinkedIn ignora saltos simples — sin la línea vacía todo queda pegado
+- Para listas usa • sin negritas, con doble salto de línea entre cada bullet
+- Cuando menciones personas, usa solo su nombre completo. NUNCA pongas URLs de perfil junto al nombre ni entre paréntesis. Las URLs de perfil de LinkedIn NO se ponen en el post
+- Los enlaces de proyectos, repos o sitios web SÍ van en el texto, escritos como URL directa (no entre paréntesis ni con formato markdown)
 - El hook (primera línea) es lo más importante: debe generar curiosidad para que hagan clic en "ver más"
 - IMPORTANTE: Escribe el post COMPLETO. No lo cortes. Termina con un cierre claro.`;
 }
 
 function formatMentions(mentions: Mention[]): string {
   if (!mentions.length) return "";
-  const items = mentions.map((m) =>
-    m.profileUrl ? `- ${m.name} (perfil: ${m.profileUrl})` : `- ${m.name}`
-  );
-  return `\nPERSONAS A MENCIONAR:\n${items.join("\n")}\nInstrucción: Menciona a estas personas de forma natural en el post. Si tienen URL de perfil, escríbelo como "${mentions[0]?.name} (${mentions[0]?.profileUrl})" para que el lector pueda hacer click a su perfil.`;
+  const names = mentions.map((m) => m.name).join(", ");
+  return `\nPERSONAS A MENCIONAR: ${names}\nInstrucción: Menciona a estas personas por su nombre completo de forma natural en el post. NO incluyas URLs de perfil de LinkedIn junto a los nombres — el autor los etiquetará manualmente en LinkedIn.`;
 }
 
 function formatLinks(links: PostLink[]): string {
