@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PostCreator - Generador de Posts de LinkedIn
 
-## Getting Started
+Herramienta web para generar posts de LinkedIn sobre eventos, hackathons y conferencias usando IA. Pensada para universitarios activos en comunidades tech que quieren mantener su marca personal sin perder tiempo redactando.
 
-First, run the development server:
+## Funcionalidades
+
+- **Generacion con IA** — Pega URLs de eventos (Luma, Instagram, formularios) y la app extrae contexto automaticamente
+- **Filtros avanzados** — Idioma (ES/EN), tono, longitud, estructura, hashtags, emojis, call-to-action
+- **Plantillas rapidas** — Presets para Hackathon, Conferencia, Agradecimiento y Proyecto
+- **Menciones con perfil** — Agrega nombre + URL de LinkedIn para menciones clickeables
+- **Enlaces integrados** — GitHub, portafolio, formularios: la IA los integra naturalmente en el post
+- **Edicion inline** — Edita el post generado directamente antes de copiar
+- **Regenerar** — Boton "Otra version" para generar variaciones sin re-llenar el formulario
+- **Copiar + Abrir LinkedIn** — Un click: copia el texto y abre LinkedIn para publicar
+- **Historial** — Guarda posts con titulo, busca por titulo, copia o abre desde el historial
+- **Hook counter** — Indica si la primera linea se cortara con "ver mas" en LinkedIn
+- **Sugerencia de horario** — Tip dinamico sobre el mejor momento para publicar
+- **Dark mode** — Toggle manual o automatico segun preferencia del sistema
+
+## Stack
+
+| Capa | Tecnologia |
+|------|-----------|
+| Framework | Next.js 15 (App Router) |
+| Estilos | Tailwind CSS |
+| IA | OpenRouter (compatible con cualquier modelo) |
+| Base de datos | Supabase (PostgreSQL) |
+| Deploy | Vercel |
+
+## Setup local
+
+```bash
+# Clonar e instalar
+git clone https://github.com/tu-usuario/creador-post-linkedin.git
+cd creador-post-linkedin
+npm install
+```
+
+### Variables de entorno
+
+Crea un archivo `.env.local` en la raiz:
+
+```
+OPENROUTER_API_KEY=sk-or-tu-key
+NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ-tu-key
+```
+
+- **OpenRouter**: Crea una cuenta en [openrouter.ai](https://openrouter.ai) y genera una API key
+- **Supabase**: Crea un proyecto en [supabase.com](https://supabase.com), las keys estan en Settings > API
+
+### Base de datos
+
+En el SQL Editor de Supabase, ejecuta:
+
+```sql
+CREATE TABLE posts (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  title text,
+  event_url text,
+  event_context text,
+  additional_context text,
+  language varchar(2) NOT NULL DEFAULT 'es',
+  generated_post text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+```
+
+### Correr
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cambiar modelo de IA
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edita `src/lib/ai.ts` y cambia el modelo. Cualquier modelo disponible en OpenRouter funciona:
 
-## Learn More
+```ts
+export const OPENROUTER_MODEL = "google/gemini-3.7-flash";  // barato y rapido
+// export const OPENROUTER_MODEL = "anthropic/claude-sonnet-5";  // mejor calidad
+// export const OPENROUTER_MODEL = "meta-llama/llama-4-maverick";  // gratis
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy en Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Sube el repo a GitHub
+2. Importa el repo en [vercel.com](https://vercel.com)
+3. Agrega las 3 variables de entorno en el dashboard
+4. Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Cada push a `main` hace deploy automatico.

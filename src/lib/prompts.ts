@@ -4,6 +4,11 @@ export interface PostLink {
   label: string;
 }
 
+export interface Mention {
+  name: string;
+  profileUrl: string;
+}
+
 export interface PostFilters {
   language: "es" | "en";
   tone: "profesional" | "casual" | "inspiracional" | "storytelling";
@@ -12,7 +17,6 @@ export interface PostFilters {
   hashtags: boolean;
   emojis: boolean;
   cta: boolean;
-  mentions: string;
 }
 
 const lengthMap = {
@@ -53,7 +57,6 @@ REGLAS DE CONTENIDO:
 ${filters.hashtags ? "- Incluye 3-5 hashtags relevantes al final del post, separados del texto principal con un salto de línea" : "- NO incluyas hashtags"}
 ${filters.emojis ? "- Usa emojis estratégicamente para dar ritmo visual (máximo 4-6 en todo el post, no al inicio de cada línea)" : "- NO uses emojis en absoluto"}
 ${filters.cta ? "- Cierra con un call-to-action natural: una pregunta genuina al lector, invitación a compartir su experiencia, o reflexión que invite a comentar" : "- Cierra con una reflexión personal, sin pedir interacción"}
-${filters.mentions ? `- Menciona y agradece naturalmente a: ${filters.mentions}. Intégralos en la narrativa, no los listes al final.` : ""}
 
 REGLAS DE FORMATO:
 - Devuelve SOLO el texto del post, nada más
@@ -61,6 +64,14 @@ REGLAS DE FORMATO:
 - Usa saltos de línea entre párrafos para legibilidad (LinkedIn muestra saltos de línea)
 - El hook (primera línea) es lo más importante: debe generar curiosidad para que hagan clic en "ver más"
 - IMPORTANTE: Escribe el post COMPLETO. No lo cortes. Termina con un cierre claro.`;
+}
+
+function formatMentions(mentions: Mention[]): string {
+  if (!mentions.length) return "";
+  const items = mentions.map((m) =>
+    m.profileUrl ? `- ${m.name} (perfil: ${m.profileUrl})` : `- ${m.name}`
+  );
+  return `\nPERSONAS A MENCIONAR:\n${items.join("\n")}\nInstrucción: Menciona a estas personas de forma natural en el post. Si tienen URL de perfil, escríbelo como "${mentions[0]?.name} (${mentions[0]?.profileUrl})" para que el lector pueda hacer click a su perfil.`;
 }
 
 function formatLinks(links: PostLink[]): string {
@@ -82,13 +93,15 @@ function formatLinks(links: PostLink[]): string {
 export function buildUserPrompt(
   eventContext: string,
   additionalContext: string,
-  links: PostLink[] = []
+  links: PostLink[] = [],
+  mentions: Mention[] = []
 ): string {
   return `INFORMACIÓN DEL EVENTO:
 ${eventContext || "No se proporcionó URL del evento. Usa solo las notas del autor."}
 
 NOTAS DEL AUTOR:
 ${additionalContext || "Sin notas adicionales."}
+${formatMentions(mentions)}
 ${formatLinks(links)}
 
 Genera el post de LinkedIn completo basándote en esta información. Recuerda: hook potente, contenido auténtico, cierre claro.`;

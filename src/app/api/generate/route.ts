@@ -5,16 +5,18 @@ import {
   buildUserPrompt,
   type PostFilters,
   type PostLink,
+  type Mention,
 } from "@/lib/prompts";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { eventUrl, additionalContext, filters, links } = body as {
+    const { eventUrl, additionalContext, filters, links, mentions } = body as {
       eventUrl: string;
       additionalContext: string;
       filters: PostFilters;
       links: PostLink[];
+      mentions: Mention[];
     };
 
     let eventContext = "";
@@ -29,7 +31,7 @@ export async function POST(req: Request) {
 
     const text = await generate(
       buildSystemPrompt(filters),
-      buildUserPrompt(eventContext, additionalContext, links || []),
+      buildUserPrompt(eventContext, additionalContext, links || [], mentions || []),
     );
 
     return Response.json({ post: text });

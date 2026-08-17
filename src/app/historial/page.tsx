@@ -43,14 +43,14 @@ export default function Historial() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Historial</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Historial</h1>
         {posts.length > 0 && (
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por título..."
-            className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-linkedin focus:ring-1 focus:ring-linkedin outline-none w-full sm:w-48"
+            className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-neutral-800 dark:text-gray-100 px-3 py-1.5 text-sm focus:border-linkedin focus:ring-1 focus:ring-linkedin outline-none w-full sm:w-48"
           />
         )}
       </div>

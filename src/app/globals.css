@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-linkedin: #0A66C2;
   --color-linkedin-light: #E8F1FA;
@@ -12,4 +14,9 @@ body {
   background: #ffffff;
   color: #1a1a1a;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.dark body {
+  background: #000000;
+  color: #e5e7eb;
 }
